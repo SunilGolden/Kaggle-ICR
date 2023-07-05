@@ -1,0 +1,6 @@
+{
+    "train_path": "./data/train.csv",
+    "test_path": "./data/test.csv",
+    "k_fold": 5,
+    "random_seed": 42
+}
