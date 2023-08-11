@@ -95,4 +95,6 @@ def fit_and_predict(clf, X_train, y_train, X_val, y_val, X_test):
     return test_pred, accuracy
 
 
-
+def balanced_log_loss(y_true, y_pred):
+    nc = np.bincount(y_true)
+    return log_loss(y_true, y_pred, sample_weight = 1/nc[y_true], eps=1e-15)
