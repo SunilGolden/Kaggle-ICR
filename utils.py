@@ -3,14 +3,36 @@ import pandas as pd
 import random
 import category_encoders as ce
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, log_loss
 
 
 def reset_random(random_seed=42):
     random.seed(random_seed)
     np.random.seed(random_seed)
 
+
+def random_under_sampler(df, random_seed=None):
+    if random_seed is not None:
+        np.random.seed(random_seed)
     
+    # Calculate the number of samples for each label. 
+    neg, pos = np.bincount(df['Class'])
+
+    # Choose the samples with class label `1`.
+    one_df = df.loc[df['Class'] == 1] 
+    # Choose the samples with class label `0`.
+    zero_df = df.loc[df['Class'] == 0]
+    # Select `pos` number of negative samples.
+    # This makes sure that we have an equal number of samples for each label.
+    zero_df = zero_df.sample(n=pos)
+
+    # Join both label dataframes.
+    undersampled_df = pd.concat([zero_df, one_df])
+
+    # Shuffle the data and return
+    return undersampled_df.sample(frac=1)
+    
+
 def impute_null_values(df, method='mean'):
     float_cols = df.select_dtypes(include='float64').columns
     for col in float_cols:
@@ -56,7 +78,7 @@ def process_dataframe(train_df, test_df):
     return train_df, test_df
 
 
-def train_and_predict(clf, X_train, y_train, X_val, y_val, X_test):
+def fit_and_predict(clf, X_train, y_train, X_val, y_val, X_test):
     # Train the classifier
     clf.fit(X_train, y_train)
     
@@ -67,6 +89,10 @@ def train_and_predict(clf, X_train, y_train, X_val, y_val, X_test):
     accuracy = accuracy_score(y_val, y_pred)
     
     # Make final test predictions
-    test_pred = clf.predict_proba(X_test)
+    # test_pred = clf.predict_proba(X_test)
+    test_pred = clf.predict_proba(X_val)
     
     return test_pred, accuracy
+
+
+
