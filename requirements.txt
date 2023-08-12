@@ -1,7 +1,8 @@
-numpy
-pandas
-scikit-learn
-xgboost
-catboost
-lightgbm
-category_encoders
+numpy==1.23.5
+pandas==1.5.3
+scikit-learn==1.2.2
+xgboost==1.7.6
+catboost==1.2
+lightgbm==3.3.2
+category_encoders==2.6.1
+tabpfn==0.1.9
