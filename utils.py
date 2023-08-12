@@ -78,7 +78,7 @@ def process_dataframe(train_df, test_df):
     return train_df, test_df
 
 
-def fit_and_predict(clf, X_train, y_train, X_val, y_val, X_test):
+def fit_and_predict(clf, X_train, y_train, X_val, y_val):
     # Train the classifier
     clf.fit(X_train, y_train)
     
@@ -89,7 +89,6 @@ def fit_and_predict(clf, X_train, y_train, X_val, y_val, X_test):
     accuracy = accuracy_score(y_val, y_pred)
     
     # Make final test predictions
-    # test_pred = clf.predict_proba(X_test)
     test_pred = clf.predict_proba(X_val)
     
     return test_pred, accuracy
